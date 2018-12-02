@@ -1,0 +1,32 @@
+{
+  "name": "matilda",
+  "version": "1.0.0",
+  "description": "Visualizing your time",
+  "main": "server/index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/stephencweiss/matilda.git"
+  },
+  "author": "Stephen Weiss <stephencweiss@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/stephencweiss/matilda/issues"
+  },
+  "homepage": "https://github.com/stephencweiss/matilda#readme",
+  "devDependencies": {
+    "babel": "^6.23.0",
+    "chalk": "^2.4.1",
+    "enzyme": "^3.7.0",
+    "jest": "^23.6.0",
+    "jest-cli": "^23.6.0",
+    "webpack": "^4.26.1"
+  },
+  "dependencies": {
+    "express": "^4.16.4",
+    "pg": "^7.7.1",
+    "sequelize": "^4.41.2"
+  }
+}
