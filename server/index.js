@@ -13,13 +13,11 @@ app.use(bodyParser.json());
 
 app.use('/', express.static(path.join(__dirname,'../client/dist')))
 
-app.post('/newBudgetItem', (request, response) => {
-  // Assume that the budgetId is known and part of the request (body?)
-  // the budgetId is defined earlier in the process because that's the page we're on.  
+app.post('/newBudgetItem/:budgetId', (request, response) => {
   db.BudgetItem.create({
     category: request.body.category,
     hours_allocated: request.body.hoursAllocated,
-    budget_id: request.body.budgetId
+    budget_id: request.params.budgetId
   })
     .then(result => response.status(201).send(result))
     .catch(err => response.status(500).send(errorMessage, err));
