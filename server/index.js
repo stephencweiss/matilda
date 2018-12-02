@@ -47,4 +47,14 @@ app.put('/updateBudgetItem/:budgetItemId', (request, response) => {
     .catch(err => response.status(404).send(errorMessage, err))
 })
 
+app.delete('/deleteBudgetItem/:budgetItemId', (request, response) => {
+  console.log(chalk.green(`Budget Id to delete -->`),request.params.budgetItemId)
+  db.BudgetItem.destroy({ 
+    where: { budget_item_id: request.params.budgetItemId },
+    limit: 1 
+  })
+    .then(() => response.sendStatus(204))
+    .catch(err => response.status(404).send(errorMessage, err))
+})
+
 app.listen(port, () => { console.log(`Server is listening on port ${port}`) })
