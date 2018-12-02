@@ -29,4 +29,10 @@ app.get('/budgetItem', (request, response) => {
     .catch(err => response.status(404).send(errorMessage, err));
 });
 
+app.get('/myBudget/:budgetId', (request, response) => {
+  db.BudgetItem.findAll({ where: { budget_id: request.params.budgetId } })
+    .then(message => response.status(200).send(message))
+    .catch(err => response.status(404).send(errorMessage, err))
+})
+
 app.listen(port, () => { console.log(`Server is listening on port ${port}`) })
