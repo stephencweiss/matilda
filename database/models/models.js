@@ -2,12 +2,11 @@ const Sequelize = require('sequelize');
 const chalk = require('chalk')
 
 const config = require('../../config.json')
-// const postgreSQL = require('../connectPG')
 
 const environment = config.environment
 
 const postgreSQL = new Sequelize(
-  config[environment].db_database, //process.env.MYSQL_DATABASE, //Database
+  config[environment].db_database, //database
   config[environment].db_username, //User
   config[environment].db_password,  // Password
   {
@@ -50,7 +49,6 @@ const Budget = postgreSQL.define('budgets', {
       model: User,
       key: 'user_id',
     },
-    primaryKey: true
   }
 }, {
   timestamps: false,
@@ -77,11 +75,8 @@ const BudgetItem = postgreSQL.define('budget_items', {
 Budget.belongsTo(User, { foreignKey: 'owner_id', targetKey: 'user_id', constraints: false })
 BudgetItem.belongsTo(Budget, { foreignKey: 'budget_id', targetKey: 'budget_id', constraints: false })
 
-// 1:m relationships
-// User.hasMany(Budget)
-// Budget.hasMany(BudgetItem)
 
-// Create a new tables if they doesn't exist;
+// Sync model with database
 // Note: Sequelize *cannot* create a database if it doesn't exist. https://github.com/sequelize/sequelize/issues/1908
 // Postgres does not allow `CREATE DATABASE IF NOT EXISTS` like other SQL DBMS
 // Once the database exists, however, it can create the schema.
@@ -93,7 +88,7 @@ postgreSQL.sync()
   .then(() => console.log(chalk.green('Sequelize Sync worked!')))
   .catch(err => console.log(chalk.red('Oh, no! An Error! -->'), err));
 
-// Export schemas
+// Export schemas for use elsewhere
 exports.User = User;
 exports.Budget = Budget;
 exports.BudgetItem = BudgetItem;
