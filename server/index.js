@@ -1,5 +1,6 @@
 const express = require('express');
 const path = require('path');
+const bodyParser = require('body-parser');
 const chalk = require('chalk')
 
 const db = require('../database/models/models.js')
@@ -8,11 +9,13 @@ const errorMessage = chalk.red('Oh No! There was an error -->');
 const port = process.argv[2] || 8080;
 let app = express()
 
+app.use(bodyParser.json());
+
 app.use('/', express.static(path.join(__dirname,'../client/dist')))
 
-app.post('/budgetItem', (request, response) => {
+app.post('/newBudgetItem', (request, response) => {
   // Assume that the budgetId is known and part of the request (body?)
-  // the budgetId is defined earlier in the process because that's the page we're on
+  // the budgetId is defined earlier in the process because that's the page we're on.  
   db.BudgetItem.create({
     category: request.body.category,
     hours_allocated: request.body.hoursAllocated,
@@ -21,7 +24,6 @@ app.post('/budgetItem', (request, response) => {
     .then(result => response.status(201).send(result))
     .catch(err => response.status(500).send(errorMessage, err));
 });
-//where: {budget_id: 8}
 
 app.get('/budgetItem', (request, response) => {
   db.BudgetItem.findAll({}) 
