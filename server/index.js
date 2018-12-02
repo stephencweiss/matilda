@@ -35,4 +35,16 @@ app.get('/myBudget/:budgetId', (request, response) => {
     .catch(err => response.status(404).send(errorMessage, err))
 })
 
+app.put('/updateBudgetItem/:budgetItemId', (request, response) => {
+  db.BudgetItem.update({
+    category: request.body.category,
+    hours_allocated: request.body.hoursAllocated
+    },
+    { where: 
+      { budget_item_id: request.params.budgetItemId }
+  })
+    .then(message => response.status(200).send(message))
+    .catch(err => response.status(404).send(errorMessage, err))
+})
+
 app.listen(port, () => { console.log(`Server is listening on port ${port}`) })
