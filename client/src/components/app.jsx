@@ -12,10 +12,34 @@ class App extends React.Component {
       budget: [],
     };
     this.handleClick = this.handleClick.bind(this);
+    this.fetchBudgetData = this.fetchBudgetData.bind(this);
   }
 
   handleClick (event) {
     console.log(`Alert! You've selected visualize`);
+  }
+
+  fetchBudgetData (budgetId) {
+    console.log(`Fetch the budgetId --> `, budgetId);
+    const instance = axios.create({ baseURL: `http://localhost:8080` });
+    instance.get(`/myBudget/data/${budgetId}`)
+      .then( (response) => {
+        console.log(`The response.data from the server is --> \n`)
+        console.log(response.data)
+        this.setState({budget: response.data})
+      })
+      .catch( (error) => { console.log(`There was an error with the Axios GET --> `, error) })
+  }
+
+  componentDidMount() {
+    const url = window.location.href.split('/');
+    console.log(`The URL is --> `, url);
+    let budgetId = Number(url[url.length -1]);
+    if (!isNaN(budgetId)) {
+      this.fetchBudgetData(budgetId);
+    } else {
+      console.log(`No Budget to fetch`)
+    }
   }
 
   render() {
