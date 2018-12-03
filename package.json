@@ -4,7 +4,10 @@
   "description": "Visualizing your time",
   "main": "server/index.js",
   "scripts": {
-    "test": "jest"
+    "test": "jest --verbose --coverage",
+    "bundle": "webpack -d --watch",
+    "start": "node server/index.js",
+    "start:dev": "nodemon server/index.js"
   },
   "repository": {
     "type": "git",
@@ -17,18 +20,48 @@
   },
   "homepage": "https://github.com/stephencweiss/matilda#readme",
   "devDependencies": {
-    "babel": "^6.23.0",
+    "@babel/cli": "^7.2.0",
+    "@babel/core": "^7.2.0",
+    "@babel/plugin-transform-modules-commonjs": "^7.2.0",
+    "@babel/preset-env": "^7.2.0",
+    "@babel/preset-react": "^7.0.0",
+    "babel-core": "^7.0.0-bridge.0",
+    "babel-jest": "^23.6.0",
+    "babel-loader": "^8.0.4",
+    "chai": "^4.2.0",
     "chalk": "^2.4.1",
     "enzyme": "^3.7.0",
+    "enzyme-adapter-react-16": "^1.7.0",
     "faker": "^4.1.0",
     "jest": "^23.6.0",
     "jest-cli": "^23.6.0",
+    "jest-environment-enzyme": "^7.0.1",
+    "jest-enzyme": "^7.0.1",
     "webpack": "^4.26.1"
   },
   "dependencies": {
+    "axios": "^0.18.0",
     "body-parser": "^1.18.3",
     "express": "^4.16.4",
     "pg": "^7.7.1",
+    "react": "^16.6.3",
+    "react-dom": "^16.6.3",
     "sequelize": "^4.41.2"
+  },
+  "jest": {
+    "setupTestFrameworkScriptFile": "<rootDir>/jestConfig.js",
+    "testEnvironment": "enzyme",
+    "testEnvironmentOptions": {
+      "enzymeAdapter": "react16"
+    },
+    "moduleNameMapper": {
+      "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/jestTests/__mocks__/fileMock.js",
+      "\\.(css|less)$": "<rootDir>/jestTests/__mocks__/styleMock.js"
+    },
+    "testPathIgnorePatterns": [
+      "<rootDir>/node_modules/",
+      "<rootDir>/client/src/stylesheets/",
+      "<rootDir>/client/dist/"
+    ]
   }
 }
