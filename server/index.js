@@ -30,6 +30,11 @@ app.get('/budgetItem', (request, response) => {
 });
 
 app.get('/myBudget/:budgetId', (request, response) => {
+  const serveApp = path.join(`${__dirname}/../client/dist/index.html`);
+  response.status(200).sendFile(serveApp);
+})
+
+app.get('/myBudget/data/:budgetId', (request, response) => {
   db.BudgetItem.findAll({ where: { budget_id: request.params.budgetId } })
     .then(message => response.status(200).send(message))
     .catch(err => response.status(404).send(errorMessage, err))
