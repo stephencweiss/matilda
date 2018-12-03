@@ -15,3 +15,30 @@ describe('Main app renders', () => {
     expect(wrapper.find('#budgetName').text()).toEqual('Budget: TestBudget');
   })
 })
+
+// Test a mock http request when a specific budget is loaded
+// Once the app mounts, we should mock an HTTP request with the following
+// When that is done mocking, we can confirm that
+  // state().budget.length === 3
+  // state().budget[0].budget_item_category === "admin"
+  // state().budget[2].budget_item_category === "40.00"
+// [
+//   {
+//     "budget_id": 1,
+//     "budget_item_id": 1,
+//     "category": "admin",
+//     "hours": "10.00",
+//   },
+//   {
+//     "budget_id": 1,
+//     "budget_item_id": 2,
+//     "category": "study",
+//     "hours": "20.00",
+//   },
+//   {
+//     "budget_id": 1,
+//     "budget_item_id": 3,
+//     "category": "work",
+//     "hours": "40.00",
+//   }
+// ]
