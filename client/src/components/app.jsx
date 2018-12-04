@@ -66,12 +66,12 @@ class App extends React.Component {
   }
 
   addBudgetCategory () {
-    console.log(`Create a pop up form -- ask for category and hours allocated`);
-    console.log(`Post a new Budget Line Item for our existing Budget`);
+    // console.log(`Create a pop up form -- ask for category and hours allocated`);
+    // console.log(`Post a new Budget Line Item for our existing Budget`);
     const instance = axios.create({ baseURL: 'http://localhost:8080' })
     instance.post(`/newBudgetItem/${this.state.budgetId}`, this.mockData())
       .then( (response) => {
-        console.log('The response data from the server POST is --> \n', response.data)
+        // console.log('The response data from the server POST is --> \n', response.data)
         this.fetchBudgetData(this.state.budgetId)
       })
       .catch( (error) => { console.log(`There was an error with the Axios POST --> `, error) })
@@ -98,7 +98,7 @@ class App extends React.Component {
   }
 
   fetchBudgetData (budgetId) {
-    console.log(`Fetch the budgetId --> `, budgetId);
+    // console.log(`Fetch the budgetId --> `, budgetId);
     const instance = axios.create({ baseURL: `http://localhost:8080` });
     instance.get(`/myBudget/data/${budgetId}`)
       .then( (response) => {
@@ -110,7 +110,7 @@ class App extends React.Component {
 
   componentDidMount() {
     const url = window.location.href.split('/');
-    console.log(`The URL is --> `, url);
+    // console.log(`The URL is --> `, url);
     let budgetId = Number(url[url.length -1]);
     if (!isNaN(budgetId)) {
       this.fetchBudgetData(budgetId);

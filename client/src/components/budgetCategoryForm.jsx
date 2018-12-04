@@ -5,13 +5,14 @@ const BudgetCategoryForm = (props) => {
     return (
       // <div id={props.budgetLine.budget_item_id}>
       <div>
-        <form onSubmit={() => console.log(`The function called on Submit`)}>
+        <form onSubmit={(e) => console.log(`The function called on Submit -->`, e)}>
           <label for="category-name">Category</label>
           <input type="text" id="category-name" name="category-name" placeholder={props.budgetLine ? props.budgetLine.category : 'New budget category name...'}></input>
 
           <label for="hours-allocated">Hours</label>
           <input type="text" id="hours-allocated" name="hours" placeholder={props.budgetLine ? props.budgetLine.hours_allocated : 'Hours to allocate...'}></input>
-          
+
+          <input type="submit" value="submit" id="category-submit"/>
         </form>
       </div>
     )
