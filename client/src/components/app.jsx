@@ -1,7 +1,8 @@
 import React from 'react';
 import axios from 'axios';
 
-import Budget from './budget.jsx'
+import Budget from './budget.jsx';
+import BudgetCategoryForm from './budgetCategoryForm.jsx';
 
 class App extends React.Component {
   constructor(props) {
@@ -128,6 +129,12 @@ class App extends React.Component {
         </div>
         <div id="budget-name">
           <h2>Budget: { this.state.budgetName }</h2>
+        </div>
+        <div id="category-form">
+          <p>Add a Category</p>
+          <BudgetCategoryForm
+            handleClick = { this.handleClick }
+          />
         </div>
         <div id="budget">
           <Budget

@@ -1,6 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import BudgetCategoryForm from './budgetCategoryForm.jsx'
+
 const BudgetLine = (props) => {
   return (
     <div id={props.budgetLine.budget_item_id}>

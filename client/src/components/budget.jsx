@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import BudgetLine from './budgetline.jsx'
+import BudgetLine from './budgetLine.jsx'
 
 const Budget = (props) => {
   // console.log(`The props are --> `, props);
