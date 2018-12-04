@@ -10,6 +10,7 @@ class App extends React.Component {
       user:'',
       budgetName:'',
       budget: [],
+      budgetId: '',
     };
     this.handleClick = this.handleClick.bind(this);
     this.fetchBudgetData = this.fetchBudgetData.bind(this);
@@ -20,9 +21,22 @@ class App extends React.Component {
     console.log(`Alert! You've selected visualize`);
   }
 
-  addBudgetItem () {
+  addBudgetItem (event) {
     console.log(`Create a pop up form -- ask for category and hours allocated`);
-    console.log('Mocking data on server for now');
+    
+    let mockData = {
+      category: String('Test').concat(`_${Math.random()}`),
+      hours_allocated: Math.random()*10,
+      budget_id: this.state.budgetId,
+    }
+
+    console.log(`Post a new Budget Line Item for our existing Budget`)
+    const instance = axios.create({ baseURL: 'http://localhost:8080' })
+    instance.post(`/newBudgetItem/${this.state.budgetId}`, mockData)
+      .then( (response) => {
+        console.log('The response data from the server is --> \n', response.data)
+      })
+      .then(() => {this.fetchBudgetData(this.state.budgetId)})
   }
 
   fetchBudgetData (budgetId) {
@@ -30,8 +44,7 @@ class App extends React.Component {
     const instance = axios.create({ baseURL: `http://localhost:8080` });
     instance.get(`/myBudget/data/${budgetId}`)
       .then( (response) => {
-        console.log(`The response.data from the server is --> \n`)
-        console.log(response.data)
+        console.log(`The response.data from the server is --> \n`, response.data)
         this.setState({budget: response.data})
       })
       .catch( (error) => { console.log(`There was an error with the Axios GET --> `, error) })
@@ -43,6 +56,7 @@ class App extends React.Component {
     let budgetId = Number(url[url.length -1]);
     if (!isNaN(budgetId)) {
       this.fetchBudgetData(budgetId);
+      this.setState({ budgetId: budgetId})
     } else {
       console.log(`No Budget to fetch`)
     }
@@ -56,8 +70,6 @@ class App extends React.Component {
           <h2 >User: { this.state.user }</h2>
         </div>
         <div id="budget-name">
-          {/* Confirm budgetName is established *prior* to loading page */}
-          {/* It _may_ come through with the onMount call */}
           <h2>Budget: { this.state.budgetName }</h2>
         </div>
         <div id="budget">
