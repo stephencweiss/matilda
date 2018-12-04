@@ -1,11 +1,12 @@
 const express = require('express');
 const path = require('path');
 const bodyParser = require('body-parser');
-const chalk = require('chalk')
+const cors = require('cors');
+const chalk = require('chalk');
 
-const db = require('../database/models/models.js')
-const config = require('../config.json')
-const environment = config.environment
+const db = require('../database/models/models.js');
+const config = require('../config.json');
+const environment = config.environment;
 
 const errorMessage = chalk.red('Oh No! There was an error -->');
 
