@@ -12,12 +12,12 @@ class App extends React.Component {
       budget: [],
       budgetId: '',
     };
-    this.handleClick = this.handleClick.bind(this);
     this.addBudgetCategory = this.addBudgetCategory.bind(this);
     this.editLineItem = this.editLineItem.bind(this);
     this.deleteLineItem = this.deleteLineItem.bind(this);
     this.categoryForm = this.categoryForm.bind(this);
     this.budgetItemForm = this.budgetItemForm.bind(this);
+    this.handleClick = this.handleClick.bind(this);
     
     this.fetchBudgetData = this.fetchBudgetData.bind(this);
     //For dev purposes only
@@ -31,8 +31,7 @@ class App extends React.Component {
     }
     if (event.target.className === "add-budget-category") {
       console.log(`Let's add a budget category`)
-      // this.categoryForm()
-      
+      this.categoryForm()
     }
     if (event.target.className === "edit-budget-line") {
       console.log(`Let's edit a budget line`)
@@ -40,12 +39,16 @@ class App extends React.Component {
     }
     if (event.target.className === "delete-budget-line") {
       console.log(`Let's delete a budget line`)
-      // deleteLineItem (budgetItemId)
+      console.log(`The budgetLineId is --> `, arguments[1])
+      const budgetIdToDelete = arguments[1].budgetLine.budget_item_id;
+      console.log(`The budgetIdToDelete is --> `,budgetIdToDelete)
+      this.deleteLineItem(budgetIdToDelete);
     }
   }
 
   categoryForm () {
-
+    // Launch a window to set the category and hours allocated
+    this.addBudgetCategory(/* The results of the form submission */);
   }
 
   budgetItemForm (budgetLine) {
