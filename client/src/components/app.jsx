@@ -13,10 +13,16 @@ class App extends React.Component {
     };
     this.handleClick = this.handleClick.bind(this);
     this.fetchBudgetData = this.fetchBudgetData.bind(this);
+    this.addBudgetItem = this.addBudgetItem.bind(this);
   }
 
   handleClick (event) {
     console.log(`Alert! You've selected visualize`);
+  }
+
+  addBudgetItem () {
+    console.log(`Create a pop up form -- ask for category and hours allocated`);
+    console.log('Mocking data on server for now');
   }
 
   fetchBudgetData (budgetId) {
@@ -57,9 +63,12 @@ class App extends React.Component {
         <div id="budget">
           <Budget
             budget = { this.state.budget }
+            addBudgetItem = { this.state.addBudgetItem }
           />
         </div>
-        <button id="visualize-budget" className="button" onClick={ this.handleClick }>Visualize</button>
+        <div>
+          <button id="visualize-budget" className="button" onClick={ this.handleClick }>Visualize</button>
+        </div>
       </div>
     );
   }
