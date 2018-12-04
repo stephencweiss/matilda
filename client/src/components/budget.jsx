@@ -4,13 +4,19 @@ import PropTypes from 'prop-types';
 import BudgetLine from './budgetline.jsx'
 
 const Budget = (props) => {
+  // console.log(`The props are --> `, props);
   return (
     <div>
       <div className="budget">
-        { props.budget.map( (budgetItem, index) => <BudgetLine budgetLine = { budgetItem } id = {index}/> )}
+        { props.budget.map( (budgetItem, index) => <BudgetLine 
+          budgetLine = { budgetItem } 
+          id = { index }
+          editLineItem = { props.editLineItem }
+          deleteLineItem = { props.deleteLineItem } 
+        /> )}
       </div>
       <div> 
-        <button id="add-budget-category" className="button" onClick={ () => props.addBudgetCategory() }>Add Budget Category</button>
+        <button className="add-budget-category" onClick={ props.addBudgetCategory }>Add Budget Category</button>
       </div>
     </div>
   )

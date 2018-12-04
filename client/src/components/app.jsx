@@ -13,15 +13,43 @@ class App extends React.Component {
       budgetId: '',
     };
     this.handleClick = this.handleClick.bind(this);
-    this.fetchBudgetData = this.fetchBudgetData.bind(this);
     this.addBudgetCategory = this.addBudgetCategory.bind(this);
+    this.editLineItem = this.editLineItem.bind(this);
+    this.deleteLineItem = this.deleteLineItem.bind(this);
+    this.categoryForm = this.categoryForm.bind(this);
+    this.budgetItemForm = this.budgetItemForm.bind(this);
     
+    this.fetchBudgetData = this.fetchBudgetData.bind(this);
     //For dev purposes only
     this.mockData = this.mockData.bind(this);
   }
 
   handleClick (event) {
-    console.log(`Alert! You've selected visualize`);
+    console.log(`Alert! You've selected visualize; Details on event -->`, event.target);
+    if (event.target.className === "visualize-budget") {
+      console.log(`Let's visualize`)
+    }
+    if (event.target.className === "add-budget-category") {
+      console.log(`Let's add a budget category`)
+      // this.categoryForm()
+      
+    }
+    if (event.target.className === "edit-budget-line") {
+      console.log(`Let's edit a budget line`)
+      this.budgetItemForm(arguments[1])
+    }
+    if (event.target.className === "delete-budget-line") {
+      console.log(`Let's delete a budget line`)
+      // deleteLineItem (budgetItemId)
+    }
+  }
+
+  categoryForm () {
+
+  }
+
+  budgetItemForm (budgetLine) {
+    console.log(`The budget line to edit is`, budgetLine)
   }
 
   //For dev purposes only
@@ -33,17 +61,36 @@ class App extends React.Component {
     })
   }
 
-  addBudgetCategory (event) {
+  addBudgetCategory () {
     console.log(`Create a pop up form -- ask for category and hours allocated`);
-    
-    console.log(`Post a new Budget Line Item for our existing Budget`)
+    console.log(`Post a new Budget Line Item for our existing Budget`);
     const instance = axios.create({ baseURL: 'http://localhost:8080' })
     instance.post(`/newBudgetItem/${this.state.budgetId}`, this.mockData())
       .then( (response) => {
-        console.log('The response data from the server is --> \n', response.data)
+        console.log('The response data from the server POST is --> \n', response.data)
         this.fetchBudgetData(this.state.budgetId)
       })
       .catch( (error) => { console.log(`There was an error with the Axios POST --> `, error) })
+  }
+
+  editLineItem (budgetItemId) {
+    const instance = axios.create({ baseURL: 'http://localhost:8080' })
+    instance.put(`/updateBudgetItem/${budgetItemId}`, this.mockData())
+      .then( (response) => {
+        console.log('The response data from the server PUT is --> \n', response.data)
+        this.fetchBudgetData(this.state.budgetId)
+      })
+      .catch( (error) => { console.log(`There was an error with the Axios PUT --> `, error) })
+  }
+
+  deleteLineItem (budgetItemId) {
+    const instance = axios.create({ baseURL: 'http://localhost:8080' })
+    instance.delete(`/deleteBudgetItem/${budgetItemId}`)
+      .then( (response) => {
+        console.log('The response data from the server DELETE is --> \n', response.data)
+        this.fetchBudgetData(this.state.budgetId)
+      })
+      .catch( (error) => { console.log(`There was an error with the Axios DELETE --> `, error) })
   }
 
   fetchBudgetData (budgetId) {
@@ -51,7 +98,7 @@ class App extends React.Component {
     const instance = axios.create({ baseURL: `http://localhost:8080` });
     instance.get(`/myBudget/data/${budgetId}`)
       .then( (response) => {
-        console.log(`The response.data from the server is --> \n`, response.data)
+        console.log(`The response.data from the server GET is --> \n`, response.data)
         this.setState({budget: response.data})
       })
       .catch( (error) => { console.log(`There was an error with the Axios GET --> `, error) })
@@ -82,12 +129,13 @@ class App extends React.Component {
         <div id="budget">
           <Budget
             budget = { this.state.budget }
-            addBudgetCategory = { this.addBudgetCategory }
+            addBudgetCategory = { this.handleClick }
+            editLineItem = { this.handleClick }
+            deleteLineItem = { this.handleClick }
           />
         </div>
         <div>
-          {/* <button id="add-budget-item" className="button" onClick={ this.addBudgetCategory }>Add_Budget</button> */}
-          <button id="visualize-budget" className="button" onClick={ this.handleClick }>Visualize</button>
+          <button className="visualize-budget" onClick={ this.handleClick }>Visualize</button>
         </div>
       </div>
     );
