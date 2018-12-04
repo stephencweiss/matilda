@@ -14,29 +14,36 @@ class App extends React.Component {
     };
     this.handleClick = this.handleClick.bind(this);
     this.fetchBudgetData = this.fetchBudgetData.bind(this);
-    this.addBudgetItem = this.addBudgetItem.bind(this);
+    this.addBudgetCategory = this.addBudgetCategory.bind(this);
+    
+    //For dev purposes only
+    this.mockData = this.mockData.bind(this);
   }
 
   handleClick (event) {
     console.log(`Alert! You've selected visualize`);
   }
 
-  addBudgetItem (event) {
+  //For dev purposes only
+  mockData () { return (
+    {
+      category: String('Test').concat(`_${Math.random()}`),
+      hoursAllocated: String(Math.random()*10),
+      budgetId: this.state.budgetId,
+    })
+  }
+
+  addBudgetCategory (event) {
     console.log(`Create a pop up form -- ask for category and hours allocated`);
     
-    let mockData = {
-      category: String('Test').concat(`_${Math.random()}`),
-      hours_allocated: Math.random()*10,
-      budget_id: this.state.budgetId,
-    }
-
     console.log(`Post a new Budget Line Item for our existing Budget`)
     const instance = axios.create({ baseURL: 'http://localhost:8080' })
-    instance.post(`/newBudgetItem/${this.state.budgetId}`, mockData)
+    instance.post(`/newBudgetItem/${this.state.budgetId}`, this.mockData())
       .then( (response) => {
         console.log('The response data from the server is --> \n', response.data)
+        this.fetchBudgetData(this.state.budgetId)
       })
-      .then(() => {this.fetchBudgetData(this.state.budgetId)})
+      .catch( (error) => { console.log(`There was an error with the Axios POST --> `, error) })
   }
 
   fetchBudgetData (budgetId) {
@@ -75,10 +82,11 @@ class App extends React.Component {
         <div id="budget">
           <Budget
             budget = { this.state.budget }
-            addBudgetItem = { this.state.addBudgetItem }
+            addBudgetCategory = { this.addBudgetCategory }
           />
         </div>
         <div>
+          {/* <button id="add-budget-item" className="button" onClick={ this.addBudgetCategory }>Add_Budget</button> */}
           <button id="visualize-budget" className="button" onClick={ this.handleClick }>Visualize</button>
         </div>
       </div>
