@@ -49,17 +49,17 @@ class App extends React.Component {
         <div id="username">
           <h2 >User: { this.state.user }</h2>
         </div>
-        <div id="budgetName">
+        <div id="budget-name">
           {/* Confirm budgetName is established *prior* to loading page */}
           {/* It _may_ come through with the onMount call */}
           <h2>Budget: { this.state.budgetName }</h2>
         </div>
-        {/* <div id="budget">
+        <div id="budget">
           <Budget
             budget = { this.state.budget }
           />
-        </div> */}
-        <button id="visualizeBudget" className="button" onClick={ this.handleClick }>Visualize</button>
+        </div>
+        <button id="visualize-budget" className="button" onClick={ this.handleClick }>Visualize</button>
       </div>
     );
   }
