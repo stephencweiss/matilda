@@ -12,7 +12,7 @@ describe('Main app renders', () => {
     expect(wrapper.state().budgetName).toEqual('TestBudget');
     expect(wrapper.find('h1').text()).toEqual('Welcome to your time budget!');
     expect(wrapper.find('#username').text()).toEqual('User: TestUser');
-    expect(wrapper.find('#budgetName').text()).toEqual('Budget: TestBudget');
+    expect(wrapper.find('#budget-name').text()).toEqual('Budget: TestBudget');
   })
 })
 
