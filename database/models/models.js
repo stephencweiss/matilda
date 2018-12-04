@@ -81,7 +81,6 @@ BudgetItem.belongsTo(Budget, { foreignKey: 'budget_id', targetKey: 'budget_id', 
 // Postgres does not allow `CREATE DATABASE IF NOT EXISTS` like other SQL DBMS
 // Once the database exists, however, it can create the schema.
 postgreSQL.sync()
-  .then(() => postgreSQL.query('USE matilda'))
   .then(() => User.sync())
   .then(() => Budget.sync())
   .then(() => BudgetItem.sync())

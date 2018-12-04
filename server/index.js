@@ -1,12 +1,16 @@
 const express = require('express');
 const path = require('path');
 const bodyParser = require('body-parser');
-const chalk = require('chalk')
+const cors = require('cors');
+const chalk = require('chalk');
 
-const db = require('../database/models/models.js')
+const db = require('../database/models/models.js');
+const config = require('../config.json');
+const environment = config.environment;
+
 const errorMessage = chalk.red('Oh No! There was an error -->');
 
-const port = process.argv[2] || 8080;
+const port = process.argv[2] || config[environment].app_port;
 let app = express()
 
 app.use(bodyParser.json());
@@ -30,6 +34,11 @@ app.get('/budgetItem', (request, response) => {
 });
 
 app.get('/myBudget/:budgetId', (request, response) => {
+  const serveApp = path.join(`${__dirname}/../client/dist/index.html`);
+  response.status(200).sendFile(serveApp);
+})
+
+app.get('/myBudget/data/:budgetId', (request, response) => {
   db.BudgetItem.findAll({ where: { budget_id: request.params.budgetId } })
     .then(message => response.status(200).send(message))
     .catch(err => response.status(404).send(errorMessage, err))
