@@ -8,10 +8,11 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      user:'',
-      budgetName:'',
+      user: this.props.user,
+      budgetName: this.props.budgetName,
       budget: [],
       budgetId: '',
+      renderAddForm: false,
     };
     this.addBudgetCategory = this.addBudgetCategory.bind(this);
     this.editLineItem = this.editLineItem.bind(this);
@@ -97,27 +98,19 @@ class App extends React.Component {
       .catch( (error) => { console.log(`There was an error with the Axios DELETE --> `, error) })
   }
 
-  fetchBudgetData (budgetId) {
-    // console.log(`Fetch the budgetId --> `, budgetId);
+  fetchBudgetData () {
+    const url = window.location.href.split('/');
+    const budgetId = Number(url[url.length -1]);
+    if ( isNaN(budgetId) ) { console.log(`No Budget to fetch`); return; }
+    
     const instance = axios.create({ baseURL: `http://localhost:8080` });
     instance.get(`/myBudget/data/${budgetId}`)
-      .then( (response) => {
-        console.log(`The response.data from the server GET is --> \n`, response.data)
-        this.setState({budget: response.data})
-      })
+      .then( (response) => { this.setState({budget: response.data}) })
       .catch( (error) => { console.log(`There was an error with the Axios GET --> `, error) })
   }
 
   componentDidMount() {
-    const url = window.location.href.split('/');
-    // console.log(`The URL is --> `, url);
-    let budgetId = Number(url[url.length -1]);
-    if (!isNaN(budgetId)) {
-      this.fetchBudgetData(budgetId);
-      this.setState({ budgetId: budgetId})
-    } else {
-      console.log(`No Budget to fetch`)
-    }
+    this.fetchBudgetData();
   }
 
   render() {
