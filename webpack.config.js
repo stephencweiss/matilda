@@ -3,7 +3,7 @@ const path = require('path');
 const SRC_DIR = path.join(__dirname, '/client/src');
 const DIST_DIR = path.join(__dirname, '/client/dist');
 
-module.exports = {
+var config = {
   entry: `${SRC_DIR}/index.jsx`,
   output: {
     filename: 'bundle.js',
@@ -47,11 +47,16 @@ module.exports = {
   resolveLoader: {
     modules: ['node_modules']
   }
-  // mode: 'development',
-  // devServer: {
-  //   contentBase: path.join(__dirname, 'public/'),
-  //   port: 3031,
-  //   publicPath: 'http://localhost:3030/dist/',
-  //   hotOnly: true,
-  // },
 };
+
+
+module.exports = (env, argv) => {
+  if (argv.mode === 'development') {
+    console.log(`Dev mode customizations`)
+  }
+  
+  if (argv.mode === 'production') {
+    console.log(`Prod mode customizations`)
+  }
+  return config;
+}
