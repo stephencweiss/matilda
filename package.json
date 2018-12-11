@@ -5,7 +5,8 @@
   "main": "server/index.js",
   "scripts": {
     "test": "jest --verbose --coverage",
-    "bundle": "webpack -d --watch",
+    "bundle:dev": "webpack -d --watch",
+    "bundle:prod": "webpack -p --watch",
     "start": "node server/index.js",
     "start:dev": "nodemon server/index.js"
   },
