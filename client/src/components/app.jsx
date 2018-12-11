@@ -14,8 +14,8 @@ class App extends React.Component {
       budgetId: '',
       renderForm: 'hide'
     };
-    this.addBudgetCategory = this.addBudgetCategory.bind(this);
-    // this.addBudgetCategoryForm = this.addBudgetCategoryForm.bind(this);
+    this.commitBudgetCategory = this.commitBudgetCategory.bind(this);
+    // this.commitBudgetCategoryForm = this.commitBudgetCategoryForm.bind(this);
     this.editLineItem = this.editLineItem.bind(this);
     this.deleteLineItem = this.deleteLineItem.bind(this);
     this.budgetItemForm = this.budgetItemForm.bind(this);
@@ -28,14 +28,21 @@ class App extends React.Component {
     this.mockData = this.mockData.bind(this);
   }
 
-  handleClick (event) {
-    console.log(`Alert! You've selected visualize; Details on event -->`, event.target);
+  handleClick (event, data) {
+    console.log(`The data passed through! --> `, data);
     if (event.target.className === "visualize-budget") {
+      console.log(`Alert! You've selected visualize; Details on event -->`, event.target);
       console.log(`Let's visualize`)
+    }
+    if ( event === "add-budget-category") { 
+      console.log(`Let's add a budget category`)
     }
     if (event.target.className === "add-budget-category") {
       console.log(`Let's add a budget category`)
-      // this.categoryForm()
+      data["budgetId"] = this.state.budgetId
+      const budgetLineData = data;// need to add a budgetId to the budgetLineData *before* committing
+      console.log(`bLD *after* adding budgetId --> `, budgetLineData)
+      this.commitBudgetCategory(budgetLineData)
     }
     if (event.target.className === "edit-budget-line") {
       console.log(`Let's edit a budget line`)
@@ -71,27 +78,11 @@ class App extends React.Component {
     }
   }
 
-  // renderCreateBudgetCategoryForm() {
-  //   console.log(`Button clicked!`)
-  //   console.log(`The renderAddForm is --> `, this.state.renderAddForm);
-  //   if (this.state.renderForm === 'show') {
-  //     return (
-  //         <div>
-  //           <BudgetCategoryForm renderToggle={this.renderToggle}/>
-  //           <button onClick= { this.renderToggle }>Submit </button>
-  //         </div>
-  //       )
-  //   }
-  //   else {
-  //     return (
-  //       <button onClick= { this.renderToggle }>Add a Category </button>
-  //     )
-  //   }
-  // }
-
-  addBudgetCategory () {
+  commitBudgetCategory (budgetLineData) {
+    console.log(`the data we *would* commit--> `, budgetLineData)
+    console.log(`this.state.budgetId`)
     const instance = axios.create({ baseURL: 'http://localhost:8080' })
-    instance.post(`/newBudgetItem/${this.state.budgetId}`, this.mockData())
+    instance.post(`/newBudgetItem/${this.state.budgetId}`, budgetLineData)
       .then( (response) => { this.fetchBudgetData() })
       .catch( (error) => { console.log(`There was an error with the Axios POST --> `, error) })
   }
@@ -123,7 +114,7 @@ class App extends React.Component {
     
     const instance = axios.create({ baseURL: `http://localhost:8080` });
     instance.get(`/myBudget/data/${budgetId}`)
-      .then( (response) => { this.setState({budget: response.data}) })
+      .then( (response) => { this.setState({budgetId: budgetId, budget: response.data}) })
       .catch( (error) => { console.log(`There was an error with the Axios GET --> `, error) })
   }
 
@@ -143,14 +134,14 @@ class App extends React.Component {
           <h2>Budget: { this.state.budgetName }</h2>
         </div>
         <div id="category-form">
-          <BudgetCategoryForm renderForm={this.state.renderForm} renderToggle={this.toggleCreateBudgetCategoryForm}/>
+          <BudgetCategoryForm onClick={this.handleClick} renderForm={this.state.renderForm} renderToggle={this.toggleCreateBudgetCategoryForm}/>
           {/* Function that toggles a form on/off*/}
           {/* Need to add additional props to BudgetCategoryForm */}
         </div>
         <div id="budget">
           <Budget
             budget = { this.state.budget }
-            addBudgetCategory = { this.handleClick }
+            commitBudgetCategory = { this.handleClick }
             editLineItem = { this.handleClick }
             deleteLineItem = { this.handleClick }
           />

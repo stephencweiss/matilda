@@ -7,22 +7,48 @@ class BudgetCategoryForm extends Component {
     this.state={}
     this.renderCreateBudgetCategoryForm = this.renderCreateBudgetCategoryForm.bind(this)
     this.theBudgetCategoryForm = this.theBudgetCategoryForm.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleChange = this.handleChange.bind(this);
   } 
+
+  handleSubmit (event) {
+    const data = this.state;
+    this.props.onClick(event, data);
+    event.preventDefault();
+  }
+
+  handleChange(event) {
+    const stateName = event.target.id;
+    const stateValue = event.target.value;
+    this.setState({[stateName]: stateValue})
+  }
 
   theBudgetCategoryForm(){
     return (
       <div>
-        <form onSubmit={(e) => {
-            console.log(`The function called on Submit -->`, e)}
-          }>
-            <label htmlFor="category-name">Category</label>
-            <input type="text" id="category-name" name="category-name" placeholder={this.props.budgetLine ? props.budgetLine.category : 'New budget category name...'}></input>
-      
-            <label htmlFor="hours-allocated">Hours</label>
-            <input type="text" id="hours-allocated" name="hours" placeholder={this.props.budgetLine ? props.budgetLine.hours_allocated : 'Hours to allocate...'}></input>
-      
-            <input type="submit" value="submit" id="category-submit"/>
-          </form>
+        <form className="add-budget-category">
+          <label htmlFor="category">Category</label>
+          <input
+            type="text" 
+            id="category" 
+            name="category" 
+            value={this.state.category} 
+            onChange={this.handleChange} 
+            placeholder={this.props.budgetLine ? props.budgetLine.category : 'New budget category name...'}>
+          </input>
+    
+          <label htmlFor="hoursAllocated">Hours</label>
+          <input
+            type="text"
+            id="hoursAllocated"
+            name="hours"
+            value={this.state.hoursAllocated}
+            onChange={this.handleChange}
+            placeholder={this.props.budgetLine ? props.budgetLine.hours_allocated : 'Hours to allocate...'}>
+          </input>
+
+          {/* <input type="submit" value="submit" id="category-submit"/> */}
+        </form>
       </div>
     )
   }
@@ -33,7 +59,8 @@ class BudgetCategoryForm extends Component {
       return (
         <div>
           {this.theBudgetCategoryForm()}
-          <button onClick= { renderToggle }>Submit </button>
+          <button className="add-budget-category" onClick= { this.handleSubmit }>Submit </button>
+          <button onClick= { renderToggle }>Clear </button>
         </div>
       )
     }
