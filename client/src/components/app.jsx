@@ -12,15 +12,17 @@ class App extends React.Component {
       budgetName: this.props.budgetName,
       budget: [],
       budgetId: '',
-      renderAddForm: false,
+      renderForm: 'hide'
     };
     this.addBudgetCategory = this.addBudgetCategory.bind(this);
+    // this.addBudgetCategoryForm = this.addBudgetCategoryForm.bind(this);
     this.editLineItem = this.editLineItem.bind(this);
     this.deleteLineItem = this.deleteLineItem.bind(this);
-    this.categoryForm = this.categoryForm.bind(this);
     this.budgetItemForm = this.budgetItemForm.bind(this);
     this.handleClick = this.handleClick.bind(this);
-    
+    this.toggleCreateBudgetCategoryForm = this.toggleCreateBudgetCategoryForm.bind(this);
+    // this.renderCreateBudgetCategoryForm = this.renderCreateBudgetCategoryForm.bind(this);
+
     this.fetchBudgetData = this.fetchBudgetData.bind(this);
     //For dev purposes only
     this.mockData = this.mockData.bind(this);
@@ -33,7 +35,7 @@ class App extends React.Component {
     }
     if (event.target.className === "add-budget-category") {
       console.log(`Let's add a budget category`)
-      this.categoryForm()
+      // this.categoryForm()
     }
     if (event.target.className === "edit-budget-line") {
       console.log(`Let's edit a budget line`)
@@ -46,11 +48,6 @@ class App extends React.Component {
       console.log(`The budgetIdToDelete is --> `,budgetIdToDelete)
       this.deleteLineItem(budgetIdToDelete);
     }
-  }
-
-  categoryForm () {
-    // Launch a window to set the category and hours allocated
-    this.addBudgetCategory(/* The results of the form submission */);
   }
 
   budgetItemForm (budgetLine) {
@@ -66,15 +63,36 @@ class App extends React.Component {
     })
   }
 
+  toggleCreateBudgetCategoryForm() {
+    if (this.state.renderForm === 'show') { 
+      this.setState({renderForm: 'hide'})
+    } else {
+      this.setState({renderForm: 'show'})
+    }
+  }
+
+  // renderCreateBudgetCategoryForm() {
+  //   console.log(`Button clicked!`)
+  //   console.log(`The renderAddForm is --> `, this.state.renderAddForm);
+  //   if (this.state.renderForm === 'show') {
+  //     return (
+  //         <div>
+  //           <BudgetCategoryForm renderToggle={this.renderToggle}/>
+  //           <button onClick= { this.renderToggle }>Submit </button>
+  //         </div>
+  //       )
+  //   }
+  //   else {
+  //     return (
+  //       <button onClick= { this.renderToggle }>Add a Category </button>
+  //     )
+  //   }
+  // }
+
   addBudgetCategory () {
-    // console.log(`Create a pop up form -- ask for category and hours allocated`);
-    // console.log(`Post a new Budget Line Item for our existing Budget`);
     const instance = axios.create({ baseURL: 'http://localhost:8080' })
     instance.post(`/newBudgetItem/${this.state.budgetId}`, this.mockData())
-      .then( (response) => {
-        // console.log('The response data from the server POST is --> \n', response.data)
-        this.fetchBudgetData(this.state.budgetId)
-      })
+      .then( (response) => { this.fetchBudgetData() })
       .catch( (error) => { console.log(`There was an error with the Axios POST --> `, error) })
   }
 
@@ -111,6 +129,7 @@ class App extends React.Component {
 
   componentDidMount() {
     this.fetchBudgetData();
+    // this.toggleCreateBudgetCategoryForm();
   }
 
   render() {
@@ -124,10 +143,9 @@ class App extends React.Component {
           <h2>Budget: { this.state.budgetName }</h2>
         </div>
         <div id="category-form">
-          <p>Add a Category</p>
-          <BudgetCategoryForm
-            handleClick = { this.handleClick }
-          />
+          <BudgetCategoryForm renderForm={this.state.renderForm} renderToggle={this.toggleCreateBudgetCategoryForm}/>
+          {/* Function that toggles a form on/off*/}
+          {/* Need to add additional props to BudgetCategoryForm */}
         </div>
         <div id="budget">
           <Budget

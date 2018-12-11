@@ -10,6 +10,7 @@ const Budget = (props) => {
       <div className="budget">
         { props.budget.map( (budgetItem, index) => <BudgetLine 
           budgetLine = { budgetItem } 
+          key = {`budgetItem`+index}
           id = { index }
           editLineItem = { props.editLineItem }
           deleteLineItem = { props.deleteLineItem } 
