@@ -24,8 +24,6 @@ class App extends React.Component {
     // this.renderCreateBudgetCategoryForm = this.renderCreateBudgetCategoryForm.bind(this);
 
     this.fetchBudgetData = this.fetchBudgetData.bind(this);
-    //For dev purposes only
-    this.mockData = this.mockData.bind(this);
   }
 
   handleClick (event, data) {
@@ -34,9 +32,9 @@ class App extends React.Component {
       console.log(`Alert! You've selected visualize; Details on event -->`, event.target);
       console.log(`Let's visualize`)
     }
-    if ( event === "add-budget-category") { 
-      console.log(`Let's add a budget category`)
-    }
+    // if ( event === "add-budget-category") { 
+    //   console.log(`Let's add a budget category`)
+    // }
     if (event.target.className === "add-budget-category") {
       console.log(`Let's add a budget category`)
       data["budgetId"] = this.state.budgetId
@@ -61,15 +59,6 @@ class App extends React.Component {
     console.log(`The budget line to edit is`, budgetLine)
   }
 
-  //For dev purposes only
-  mockData () { return (
-    {
-      category: String('Test').concat(`_${Math.random()}`),
-      hoursAllocated: String(Math.random()*10),
-      budgetId: this.state.budgetId,
-    })
-  }
-
   toggleCreateBudgetCategoryForm() {
     if (this.state.renderForm === 'show') { 
       this.setState({renderForm: 'hide'})
@@ -87,9 +76,9 @@ class App extends React.Component {
       .catch( (error) => { console.log(`There was an error with the Axios POST --> `, error) })
   }
 
-  editLineItem (budgetItemId) {
+  editLineItem (budgetItemId, budgetLIneData) {
     const instance = axios.create({ baseURL: 'http://localhost:8080' })
-    instance.put(`/updateBudgetItem/${budgetItemId}`, this.mockData())
+    instance.put(`/updateBudgetItem/${budgetItemId}`, budgetLIneData) // budgetLineData needs to be defined
       .then( (response) => {
         console.log('The response data from the server PUT is --> \n', response.data)
         this.fetchBudgetData(this.state.budgetId)

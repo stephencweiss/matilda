@@ -4,7 +4,11 @@ class BudgetCategoryForm extends Component {
 
   constructor (props){
     super(props)
-    this.state={}
+    this.state={
+      category: '',
+      hoursAllocated: '',
+    }
+
     this.renderCreateBudgetCategoryForm = this.renderCreateBudgetCategoryForm.bind(this)
     this.theBudgetCategoryForm = this.theBudgetCategoryForm.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -29,44 +33,42 @@ class BudgetCategoryForm extends Component {
         <form className="add-budget-category">
           <label htmlFor="category">Category</label>
           <input
-            type="text" 
             id="category" 
             name="category" 
             value={this.state.category} 
             onChange={this.handleChange} 
-            placeholder={this.props.budgetLine ? props.budgetLine.category : 'New budget category name...'}>
+            placeholder={this.props.budgetLine ? props.budgetLine.category : 'New budget category name...'}
+            >
           </input>
     
           <label htmlFor="hoursAllocated">Hours</label>
           <input
-            type="text"
             id="hoursAllocated"
             name="hours"
             value={this.state.hoursAllocated}
             onChange={this.handleChange}
-            placeholder={this.props.budgetLine ? props.budgetLine.hours_allocated : 'Hours to allocate...'}>
+            placeholder={this.props.budgetLine ? props.budgetLine.hours_allocated : 'Hours to allocate...'}
+            >
           </input>
-
-          {/* <input type="submit" value="submit" id="category-submit"/> */}
         </form>
       </div>
     )
   }
 
   renderCreateBudgetCategoryForm() {
-    const {renderToggle} = this.props;
+    const { renderToggle } = this.props;
     if (this.props.renderForm === 'show') {
       return (
         <div>
           {this.theBudgetCategoryForm()}
           <button className="add-budget-category" onClick= { this.handleSubmit }>Submit </button>
-          <button onClick= { renderToggle }>Clear </button>
+          <button onClick= { renderToggle }>Clear</button>
         </div>
       )
     }
     else {
       return (
-        <button onClick= { renderToggle }>Add a Category </button>
+        <button onClick= { renderToggle }>Add a Category</button>
       )
     }
   }
