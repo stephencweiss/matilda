@@ -3,6 +3,8 @@ import axios from 'axios';
 
 import Budget from './budget.jsx';
 import BudgetCategoryForm from './budgetCategoryForm.jsx';
+import BudgetHoursAnalysis from './budgetHoursAnalysis.jsx';
+import { sumBudgetHours } from '../utils/sumBudgetHours.js';
 
 class App extends React.Component {
   constructor(props) {
@@ -12,18 +14,18 @@ class App extends React.Component {
       budgetName: this.props.budgetName,
       budget: [],
       budgetId: '',
-      renderForm: 'hide'
+      renderForm: 'hide',
+      budgetHours: undefined
     };
     this.commitBudgetCategory = this.commitBudgetCategory.bind(this);
-    // this.commitBudgetCategoryForm = this.commitBudgetCategoryForm.bind(this);
     this.editLineItem = this.editLineItem.bind(this);
     this.deleteLineItem = this.deleteLineItem.bind(this);
     this.budgetItemForm = this.budgetItemForm.bind(this);
     this.handleClick = this.handleClick.bind(this);
     this.toggleCreateBudgetCategoryForm = this.toggleCreateBudgetCategoryForm.bind(this);
-    // this.renderCreateBudgetCategoryForm = this.renderCreateBudgetCategoryForm.bind(this);
-
     this.fetchBudgetData = this.fetchBudgetData.bind(this);
+    
+    this.sumBudgetHours = sumBudgetHours.bind(this);
   }
 
   handleClick (event, data) {
@@ -32,14 +34,10 @@ class App extends React.Component {
       console.log(`Alert! You've selected visualize; Details on event -->`, event.target);
       console.log(`Let's visualize`)
     }
-    // if ( event === "add-budget-category") { 
-    //   console.log(`Let's add a budget category`)
-    // }
     if (event.target.className === "add-budget-category") {
       console.log(`Let's add a budget category`)
       data["budgetId"] = this.state.budgetId
-      const budgetLineData = data;// need to add a budgetId to the budgetLineData *before* committing
-      console.log(`bLD *after* adding budgetId --> `, budgetLineData)
+      const budgetLineData = data;
       this.commitBudgetCategory(budgetLineData)
     }
     if (event.target.className === "edit-budget-line") {
@@ -103,13 +101,14 @@ class App extends React.Component {
     
     const instance = axios.create({ baseURL: `http://localhost:8080` });
     instance.get(`/myBudget/data/${budgetId}`)
-      .then( (response) => { this.setState({budgetId: budgetId, budget: response.data}) })
+      .then( (response) => { 
+        const budgetHours = this.sumBudgetHours(response.data)
+        this.setState({budgetId: budgetId, budget: response.data, budgetHours: budgetHours}) })
       .catch( (error) => { console.log(`There was an error with the Axios GET --> `, error) })
   }
 
   componentDidMount() {
     this.fetchBudgetData();
-    // this.toggleCreateBudgetCategoryForm();
   }
 
   render() {
@@ -124,8 +123,6 @@ class App extends React.Component {
         </div>
         <div id="category-form">
           <BudgetCategoryForm onClick={this.handleClick} renderForm={this.state.renderForm} renderToggle={this.toggleCreateBudgetCategoryForm}/>
-          {/* Function that toggles a form on/off*/}
-          {/* Need to add additional props to BudgetCategoryForm */}
         </div>
         <div id="budget">
           <Budget
@@ -137,6 +134,9 @@ class App extends React.Component {
         </div>
         <div>
           <button className="visualize-budget" onClick={ this.handleClick }>Visualize</button>
+        </div>
+        <div>
+          <BudgetHoursAnalysis budgetHours={ this.state.budgetHours }/>
         </div>
       </div>
     );
