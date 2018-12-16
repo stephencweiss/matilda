@@ -2,9 +2,9 @@ import React from 'react';
 import axios from 'axios';
 
 import Budget from './budget.jsx';
-import BudgetCategoryForm from './budgetCategoryForm.jsx';
+import AddBudgetCategory from './addBudgetCategory.jsx';
 import BudgetHoursAnalysis from './budgetHoursAnalysis.jsx';
-import { sumBudgetHours } from '../utils/sumBudgetHours.js';
+import sumBudgetHours from '../utils/sumBudgetHours.js';
 
 class App extends React.Component {
   constructor(props) {
@@ -22,7 +22,7 @@ class App extends React.Component {
     this.deleteLineItem = this.deleteLineItem.bind(this);
     this.budgetItemForm = this.budgetItemForm.bind(this);
     this.handleClick = this.handleClick.bind(this);
-    this.toggleCreateBudgetCategoryForm = this.toggleCreateBudgetCategoryForm.bind(this);
+    this.toggleViewMode = this.toggleViewMode.bind(this);
     this.fetchBudgetData = this.fetchBudgetData.bind(this);
     
     this.sumBudgetHours = sumBudgetHours.bind(this);
@@ -42,7 +42,7 @@ class App extends React.Component {
     }
     if (event.target.className === "edit-budget-line") {
       console.log(`Let's edit a budget line`)
-      this.budgetItemForm(arguments[1])
+      
     }
     if (event.target.className === "delete-budget-line") {
       console.log(`Let's delete a budget line`)
@@ -57,7 +57,7 @@ class App extends React.Component {
     console.log(`The budget line to edit is`, budgetLine)
   }
 
-  toggleCreateBudgetCategoryForm() {
+  toggleViewMode() {
     if (this.state.renderForm === 'show') { 
       this.setState({renderForm: 'hide'})
     } else {
@@ -74,9 +74,9 @@ class App extends React.Component {
       .catch( (error) => { console.log(`There was an error with the Axios POST --> `, error) })
   }
 
-  editLineItem (budgetItemId, budgetLIneData) {
+  editLineItem ({ budgetItemId, budgetLineData }) {
     const instance = axios.create({ baseURL: 'http://localhost:8080' })
-    instance.put(`/updateBudgetItem/${budgetItemId}`, budgetLIneData) // budgetLineData needs to be defined
+    instance.put(`/updateBudgetItem/${budgetItemId}`, budgetLineData) // budgetLineData needs to be defined
       .then( (response) => {
         console.log('The response data from the server PUT is --> \n', response.data)
         this.fetchBudgetData(this.state.budgetId)
@@ -115,25 +115,32 @@ class App extends React.Component {
     return (
       <div>
         <h1>Welcome to your time budget!</h1>
-        <div id="username">
+        <div id = "username">
           <h2 >User: { this.state.user }</h2>
         </div>
-        <div id="budget-name">
+        <div id = "budget-name">
           <h2>Budget: { this.state.budgetName }</h2>
         </div>
-        <div id="category-form">
-          <BudgetCategoryForm onClick={this.handleClick} renderForm={this.state.renderForm} renderToggle={this.toggleCreateBudgetCategoryForm}/>
+        <div id = "category-form">
+          <AddBudgetCategory 
+            onClick={this.handleClick} 
+            renderForm={this.state.renderForm}
+            renderToggle={this.toggleViewMode}
+          />
         </div>
-        <div id="budget">
+        <div id = "budget">
           <Budget
             budget = { this.state.budget }
             commitBudgetCategory = { this.handleClick }
-            editLineItem = { this.handleClick }
+            editLineItem = { this.editLineItem }
             deleteLineItem = { this.handleClick }
           />
         </div>
         <div>
-          <button className="visualize-budget" onClick={ this.handleClick }>Visualize</button>
+          <button 
+            className = "visualize-budget"
+            onClick = { this.handleClick }> Visualize
+          </button>
         </div>
         <div>
           <BudgetHoursAnalysis budgetHours={ this.state.budgetHours }/>
