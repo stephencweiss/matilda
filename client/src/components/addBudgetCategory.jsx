@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 
-class BudgetCategoryForm extends Component {
+class AddBudgetCategory extends Component {
 
-  constructor (props){
+  constructor(props) {
     super(props)
     this.state={
       category: '',
@@ -27,10 +27,10 @@ class BudgetCategoryForm extends Component {
     this.setState({[stateName]: stateValue})
   }
 
-  theBudgetCategoryForm(){
+  theBudgetCategoryForm() {
     return (
       <div>
-        <form className="add-budget-category">
+        <form className="budget-category">
           <label htmlFor="category">Category</label>
           <input
             id="category" 
@@ -60,9 +60,9 @@ class BudgetCategoryForm extends Component {
     if (this.props.renderForm === 'show') {
       return (
         <div>
-          {this.theBudgetCategoryForm()}
-          <button className="add-budget-category" onClick= { this.handleSubmit }>Submit </button>
-          <button onClick= { renderToggle }>Clear</button>
+          { this.theBudgetCategoryForm() }
+          <button className="add-budget-category" onClick = { this.handleSubmit }>Submit </button>
+          <button onClick = { renderToggle }>Clear</button>
         </div>
       )
     }
@@ -73,18 +73,15 @@ class BudgetCategoryForm extends Component {
     }
   }
 
-  render() {
-    console.log(`The budget category props are --> `, this.props)
-    return (<div>{this.renderCreateBudgetCategoryForm()}</div>)
-  }
+  render() { return this.renderCreateBudgetCategoryForm() }
 }
                 
 // PropTypes tell other developers what `props` a component expects
 // Warnings will be shown in the console when the defined rules are violated
-BudgetCategoryForm.propTypes = {
+AddBudgetCategory.propTypes = {
   // budget: PropTypes.array
 };
 
 // In the ES6 spec, files are "modules" and do not share a top-level scope.
 // `var` declarations will only exist globally where explicitly defined.
-export default BudgetCategoryForm;
+export default AddBudgetCategory;

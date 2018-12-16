@@ -1,25 +1,27 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 import BudgetLine from './budgetLine.jsx'
 
-const Budget = (props) => {
-  return (
-    <div>
+class Budget extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {}
+  }
+
+  render(){
+    return (
       <div className="budget">
-        { props.budget.map( (budgetItem, index) => <BudgetLine 
+        { this.props.budget.map( (budgetItem, index) => <BudgetLine 
           budgetLine = { budgetItem } 
           key = {`budgetItem`+index}
           id = { index }
-          editLineItem = { props.editLineItem }
-          deleteLineItem = { props.deleteLineItem } 
+          editLineItem = { this.props.editLineItem }
+          deleteLineItem = { this.props.deleteLineItem } 
         /> )}
       </div>
-      <div> 
-        <button className="add-budget-category" onClick={ props.commitBudgetCategory }> Add Random Budget Category</button>
-      </div>
-    </div>
-  )
+    )
+  }
 }
 
 // PropTypes tell other developers what `props` a component expects
