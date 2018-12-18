@@ -4,7 +4,10 @@ import axios from 'axios';
 import Budget from './budget.jsx';
 import AddBudgetCategory from './addBudgetCategory.jsx';
 import BudgetHoursAnalysis from './budgetHoursAnalysis.jsx';
+import VisualizeBudget from './visualizeBudget.jsx';
+
 import sumBudgetHours from '../utils/sumBudgetHours.js';
+import processBudgetData from '../utils/processBudgetData.js';
 
 class App extends React.Component {
   constructor(props) {
@@ -13,6 +16,8 @@ class App extends React.Component {
       user: this.props.user,
       budgetName: this.props.budgetName,
       budget: [],
+      budgetLabels: [],
+      budgetValues: [],
       budgetId: '',
       renderForm: 'hide',
       budgetHours: undefined
@@ -26,6 +31,7 @@ class App extends React.Component {
     this.fetchBudgetData = this.fetchBudgetData.bind(this);
     
     this.sumBudgetHours = sumBudgetHours.bind(this);
+    this.processBudgetData = processBudgetData.bind(this);
   }
 
   handleClick (event, data) {
@@ -45,10 +51,7 @@ class App extends React.Component {
       
     }
     if (event.target.className === "delete-budget-line") {
-      console.log(`Let's delete a budget line`)
-      console.log(`The budgetLineId is --> `, arguments[1])
       const budgetIdToDelete = arguments[1].budgetLine.budget_item_id;
-      console.log(`The budgetIdToDelete is --> `,budgetIdToDelete)
       this.deleteLineItem(budgetIdToDelete);
     }
   }
@@ -103,7 +106,16 @@ class App extends React.Component {
     instance.get(`/myBudget/data/${budgetId}`)
       .then( (response) => { 
         const budgetHours = this.sumBudgetHours(response.data)
-        this.setState({budgetId: budgetId, budget: response.data, budgetHours: budgetHours}) })
+        this.setState({budgetId: budgetId, budget: response.data, budgetHours: budgetHours}) 
+        return response.data;
+      })
+      .then((budget) => {
+        const processedBudget = this.processBudgetData(budget);
+        this.setState({
+          budgetLabels: processedBudget.labels,
+          budgetValues: processedBudget.values
+        })
+      })
       .catch( (error) => { console.log(`There was an error with the Axios GET --> `, error) })
   }
 
@@ -137,10 +149,10 @@ class App extends React.Component {
           />
         </div>
         <div>
-          <button 
-            className = "visualize-budget"
-            onClick = { this.handleClick }> Visualize
-          </button>
+          <VisualizeBudget 
+            budgetLabels = { this.state.budgetLabels }
+            budgetValues = { this.state.budgetValues }
+          />
         </div>
         <div>
           <BudgetHoursAnalysis budgetHours={ this.state.budgetHours }/>
