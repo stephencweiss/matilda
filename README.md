@@ -1,8 +1,7 @@
-# matilda
-See your time in a whole new way. Small, lightweight, magical. 
+# Matilda releases
 
+This repository holds signed installers for Matilda for Mac. Apple Silicon, macOS 15 or later.
 
-# Use
+Download the newest installer from [Releases](../../releases/latest). Check its SHA-256 hash before you open it. The hash is in the release notes.
 
-`npm install` to install dependencies
-Before using this app, run `npm run bundle` to create a bundle for testing
+The code from the first version of Matilda (2022) is on the `archive-2022` branch.

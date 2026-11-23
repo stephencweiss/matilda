@@ -1,6 +1,0 @@
-node_modules
-package-lock.json
-config.json
-*.tmp
-client/dist/bundle.js
-coverage
